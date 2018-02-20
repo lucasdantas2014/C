@@ -1,4 +1,4 @@
- #include <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
@@ -13,7 +13,7 @@ typedef struct
 } Pilha;
 
 
-int contadorNodo(char *arvore,int contador){
+int CPN(char *arvore,int contador){
   int abertos = 1;
   int fechados = 0;
   int nodos = 0;
@@ -23,10 +23,7 @@ int contadorNodo(char *arvore,int contador){
       abertos++;
       contador++;
     }
-    
-     
 
-    
     else if(arvore[contador] == ')')
     {
       
@@ -35,16 +32,9 @@ int contadorNodo(char *arvore,int contador){
       {
         nodos+=1;
       }
-      
-      else if(arvore[contador -1] == '(')
-      {
-        nodos+=1;
-      }
-      
+
       fechados++;
       contador++;
-
-    
 
     }
     else
@@ -54,13 +44,49 @@ int contadorNodo(char *arvore,int contador){
     if(abertos == fechados)
     {
 
-      //printf("\n-----------\nNodos: %d\n-------------\n", nodos -1 );
-            /*
-      printf("\n-----------\nAbertos: %d\n-------------\n", abertos);
+      return(nodos);
+    }
+  }
+}
 
-      printf("\n-----------\nFechados: %d\n-------------\n", fechados);
-      */
-      break;
+int CTN(char *arvore,int contador){
+  int abertos = 1;
+  int fechados = 0;
+  int nodos = 0;
+  while(1){
+    if(arvore[contador] == '(')
+    {
+      abertos++;
+      contador++;
+    }
+ 
+    else if(arvore[contador] == ')')
+    {
+      
+    
+      if(arvore[contador -1] == ')')
+      {
+        nodos+=1;
+      }
+      
+      
+      if(arvore[contador -1] == '(')
+      {
+        nodos+=1;
+      }
+
+      fechados++;
+      contador++;
+
+    }
+    else
+    {
+      contador++;
+    }
+    if(abertos == fechados)
+    {
+
+      return(nodos -1);
     }
   }
 }
@@ -72,76 +98,35 @@ initPilha (Pilha * p, int max)
   p->tamMax = max;
 }
 
-int
-verificar (char *arvore, int direcao, int contador, Pilha * pais)
-{
-  
-  
-  
-  /*
-  printf("\n\n-----------");
-  printf("\nO CARACTER desta rodada E o: %c",arvore[contador]);
-  printf("\no PAI DESTA RODADA E O: %d\n",pais->elementos[pais->top]);
-  printf("--------------------\n");
-  */
-  //printf("\n O tam: %d  O cont: %d\n",pais->tamMax, contador);
 
-  if(pais->tamMax - 1 <= contador && pais->top > -1){
+
+int verificar (char *arvore, int direcao, int contador, Pilha * pais)
+{
+  printf("HE");
+  if(pais->tamMax - 1 <= contador){
     return 1;
   }
 
-  if (direcao == 1 || direcao == 2)
-    {
+  if (direcao == 1 || direcao == 2){
 
       //SE O CARACTER FOR UM PARENTESE ABERTO ADIANTE 1 CARACTER
-      if (arvore[contador] == '(')
-	{
-	  contador++;
-	  verificar (arvore, direcao, contador,
-	  pais);
-	}
+    if (arvore[contador] == '('){
+      contador++;
+      verificar (arvore, direcao, contador,pais);
+    }
 
       //SE O CARACTER FOR UM PARENTESE FECHADO ADIANTE 1 CARACTER E MUDE A DIRECAO
-  else if (arvore[contador] == ')')
-	{
-	  
-	  if (arvore[contador -1] == ')'){
-	    
-	    pais->qtvElem[pais->top] += 1;
+    else if (arvore[contador] == ')')
+	  {
+		  if (direcao == 1){
+  	      direcao = 2;
+  	    }
+  	  else{
+  	      direcao = 1;
+  	      pais->top -= 1;
+  	    }
 
-  	  //printf("\nELE APARECEU: %d", pais->qtvElem[pais->top]);
-  	  if(pais->qtvElem[pais->top] > 10)
-  	  {
-  	    //printf("FOi por Nodo");
-  	    return 0;
-  	  }
-  	    
-	  }
-	  else if(arvore[contador - 1] == '('){
-	    pais->qtvElem[pais->top] += 1;
-  	  //printf("\nELE APARECEU: %d", pais->qtvElem[pais->top]);
-  	  if(pais->qtvElem[pais->top] > 10)
-  	  {
-  	    //printf("FOi por Nodo");
-  	    return 0;
-  	  }
-	  }
-	 
-
-	  if (direcao == 1)
-	    {
-	      direcao = 2;
-	    }
-	  else
-	    {
-	      direcao = 1;
-	      pais->top -= 1;
-	    }
-	 
-	  
-	  
 	  contador++;
-
 
 	  verificar (arvore, direcao, contador, pais);
 	}
@@ -160,9 +145,6 @@ verificar (char *arvore, int direcao, int contador, Pilha * pais)
 	  int pai;
 	  while (isdigit(arvore[contador]))
 	    {
-	      
-	      
-	      //N
 	      numeroSTR[addNumC] = arvore[contador];
 	      contador++;
 	      addNumC++;
@@ -171,17 +153,14 @@ verificar (char *arvore, int direcao, int contador, Pilha * pais)
 	  pais->top++;
 	  pais->elementos[pais->top] = valor;
 	  pai = pais->elementos[pais->top - 1];
-	  //printf("\nELE APARECEU: %d", pais->qtvElem[pais->top]);
 
 	  // CASO ENTRE NESSES CASOS VAO RETORNAR 1 E VAI SER FALSO
 	  if (direcao == 1 && pai < valor && pais->top > 0)
 	    {
-	      //printf("FOi POr valor!\n");
 	      return 0;
 	    }
 	  else if (direcao == 2 && pai > valor && pais->top > 0)
 	    { 
-	      //printf("FOi POr valor!\n");
 	      return 0;
 	    }
 	    
@@ -189,7 +168,6 @@ verificar (char *arvore, int direcao, int contador, Pilha * pais)
 	        direcao = 1;
 	   }
 	   
-	  contadorNodo(arvore, contador);
 	  verificar (arvore, direcao, contador, pais);
 	}
     }
@@ -199,7 +177,9 @@ verificar (char *arvore, int direcao, int contador, Pilha * pais)
 
 int main (void)
 {
-  int resp;
+  int resp = 0;
+  int contN1;
+  int contN2;
   char arvore[5000];
   Pilha pais;
   
@@ -207,14 +187,14 @@ int main (void)
   fgets(arvore,5000,stdin);
   pais.top = -1;
   pais.tamMax = strlen(arvore);
-  int cont;
-  for (cont = 0; cont <= pais.tamMax; cont++)
-  {
-    pais.qtvElem[cont] = 0;
+
+  contN1 = CPN(arvore,0);
+  contN1 = contN1 *2;
+  contN2 = CTN(arvore,0);
+ 
+  if (contN1 >= contN2){
+    resp = verificar (arvore, 1, 0, &pais);
   }
-  
-  resp = verificar (arvore, 1, 0, &pais);
-	//printf("Resposta");
 	if(resp == 0){
 	  printf("FALSO");
 	}
@@ -223,4 +203,6 @@ int main (void)
 	}
   return 0;
 }
+
+
 
